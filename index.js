@@ -1,12 +1,13 @@
-'use-strict';
 
-function getDogImage() {
-  fetch('https://dog.ceo/api/breeds/image/random')
+'use strict';
+
+function getDogImage(dogNumber) {
+  fetch(`https://dog.ceo/api/breeds/image/random/${dogNumber}`)
     .then(response => response.json())
     .then(responseJson => 
       displayResults(responseJson))
     .catch(error => alert('Something went wrong. Try again later.'));
-  }
+}
 
 function getDogBreed(breed){
   fetch(`https://dog.ceo/api/breed/${breed}/images/random`)
@@ -23,8 +24,8 @@ function displayResults(responseJson) {
   } else {
     //replace the existing image with the new one
     $('.images').append(
-     `<img src="${responseJson.message}" class="results-img">`
-    )
+      `<img src="${responseJson.message}" class="results-img">`
+    );
     //display the results section
     $('.results').removeClass('hidden');
   }

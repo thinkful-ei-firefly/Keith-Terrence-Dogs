@@ -1,8 +1,15 @@
 'use-strict';
 
 function getDogImage() {
-  console.log('Call');
   fetch('https://dog.ceo/api/breeds/image/random')
+    .then(response => response.json())
+    .then(responseJson => 
+      displayResults(responseJson))
+    .catch(error => alert('Something went wrong. Try again later.'));
+  }
+
+function getDogBreed(breed){
+  fetch(`https://dog.ceo/api/breed/${breed}/images/random`)
     .then(response => response.json())
     .then(responseJson => 
       displayResults(responseJson))
@@ -11,15 +18,19 @@ function getDogImage() {
 
 function displayResults(responseJson) {
   console.log(responseJson);
-  //replace the existing image with the new one
-  $('.images').append(
-    `<img src="${responseJson.message}" class="results-img">`
-  )
-  //display the results section
-  $('.results').removeClass('hidden');
+  if (responseJson.code === 404){
+    alert('Breed could not be found!');
+  } else {
+    //replace the existing image with the new one
+    $('.images').append(
+     `<img src="${responseJson.message}" class="results-img">`
+    )
+    //display the results section
+    $('.results').removeClass('hidden');
+  }
 }
 
-function handleSubmit(){
+function handleNumberSubmit(){
   $('#number').submit(event => {
     event.preventDefault();
     $('.images').empty();
@@ -42,4 +53,18 @@ function handleSubmit(){
   }
 }
 
-$(handleSubmit());
+function handleBreedSubmit(){
+  $('#Breed').submit(event => {
+    event.preventDefault();
+    $('.images').empty();
+    const dogBreed = $(event.currentTarget).children('input').val();
+    getDogBreed(dogBreed);
+  });
+}
+
+function main(){
+  handleBreedSubmit();
+  handleNumberSubmit();
+}
+
+$(main());
